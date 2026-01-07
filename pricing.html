@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام تسعير الكيك - اليحي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- خط Tajawal -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #b88a44;
+            --primary-dark: #9a7032;
+            --bg: #f7f3ec;
+            --card-bg: #ffffff;
+            --border: #e0d6c7;
+            --text-main: #222;
+            --text-muted: #777;
+            --danger: #c0392b;
+            --success: #27ae60;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Tajawal", system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 15px 40px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 16px 14px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .row { display: flex; flex-wrap: wrap; gap: 10px; }
+        .col-3 { flex: 0 0 calc(25% - 8px); }
+        .col-4 { flex: 0 0 calc(33.333% - 7px); }
+        .col-6 { flex: 0 0 calc(50% - 5px); }
+        .col-12 { flex: 0 0 100%; }
+
+        @media (max-width: 768px) {
+            .col-3, .col-4, .col-6 { flex: 0 0 100%; }
+        }
+
+        label {
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 7px 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            border: 1px solid #eee1cd;
+            padding: 6px 4px;
+            text-align: center;
+        }
+
+        th { background: #f3e7d3; }
+
+        .btn {
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-success { background: #e6f7ec; color: var(--success); }
+        .btn-danger { background: #fbe9e7; color: var(--danger); }
+        .btn-ghost { background: #f7f0e6; color: var(--primary-dark); }
+        .btn-sm { padding: 3px 8px; font-size: 0.75rem; }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 8px;
+        }
+
+        .result-box {
+            background: #f9f4ea;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #eadbc2;
+        }
+
+        .result-label { font-size: 0.8rem; color: var(--text-muted); }
+        .result-value { font-size: 1rem; font-weight: 600; }
+
+        .muted { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* شاشة الدخول بكلمة مرور */
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 20px 18px;
+            max-width: 320px;
+            width: 100%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 0.95rem;
+            letter-spacing: 0.3em;
+            text-align: center;
+        }
+
+        .login-error {
+            font-size: 0.8rem;
+            color: var(--danger);
+            margin-top: 6px;
+            min-height: 16px;
+        }
+
+        .login-btn {
+            margin-top: 12px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- شاشة كلمة المرور -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+        <div class="login-title">دخول نظام تسعير الكيك</div>
+        <div class="login-subtitle">أدخل كلمة المرور للمتابعة</div>
+        <input id="passwordInput" type="password" maxlength="4" class="login-input" placeholder="••••">
+        <div id="loginError" class="login-error"></div>
+        <button id="loginBtn" class="btn btn-primary login-btn">دخول</button>
+    </div>
+</div>
+
+<div class="page" id="app" style="display:none;">
+
+    <header>
+        <div>
+            <div class="brand">نظام تسعير الكيك - اليحي</div>
+            <div class="subtitle">تكلفة المواد + التشغيل + الربح + طباعة الصورة + الضريبة 15%</div>
+        </div>
+    </header>
+
+    <!-- بيانات العميل + الطلب -->
+    <section class="card">
+        <div class="card-title">بيانات العميل والطلب</div>
+        <div class="card-subtitle">يتم حفظ اسم العميل ورقم الهاتف مع كل طلب.</div>
+        <div class="row">
+            <div class="col-4">
+                <label for="clientName">اسم العميل</label>
+                <input id="clientName" type="text" placeholder="مثال: أحمد خالد">
+            </div>
+            <div class="col-4">
+                <label for="clientPhone">رقم الهاتف</label>
+                <input id="clientPhone" type="text" placeholder="05xxxxxxxx">
+            </div>
+            <div class="col-4">
+                <label for="cakeServings">عدد الحصص</label>
+                <input id="cakeServings" type="number" value="10" min="1">
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+            <div class="col-6">
+                <label for="cakeName">اسم/وصف الكيك</label>
+                <input id="cakeName" type="text" placeholder="مثال: كيكة شوكولاتة بطبعة صورة">
+            </div>
+            <div class="col-3">
+                <label for="cakeSize">المقاس</label>
+                <select id="cakeSize">
+                    <option value="8 إنش">8 إنش</option>
+                    <option value="10 إنش">10 إنش</option>
+                    <option value="12 إنش">12 إنش</option>
+                    <option value="مستطيل وسط">مستطيل وسط</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- طباعة صورة على الكيك -->
+    <section class="card">
+        <div class="card-title">طباعة صورة على الكيك</div>
+        <div class="card-subtitle">أضف تكلفة طباعة الصورة (ورق سكر / ألوان غذائية ...)</div>
+        <div class="row">
+            <div class="col-6">
+                <label>
+                    <input type="checkbox" id="imagePrintEnabled">
+                    تفعيل طباعة صورة على الكيك
+                </label>
+            </div>
+            <div class="col-6">
+                <label for="imagePrintCost">تكلفة طباعة الصورة (﷼)</label>
+                <input id="imagePrintCost" type="number" value="0" min="0" step="0.5">
+                <span class="muted">مثال: 20 – 40 ﷼ حسب المقاس والجودة.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- المواد الخام -->
+    <section class="card">
+        <div class="card-title">المواد الخام</div>
+        <div class="card-subtitle">أدخل سعر الكيلو/الوحدة والكمية لكل مادة.</div>
+
+        <div style="overflow-x:auto;">
+            <table id="ingredientsTable">
+                <thead>
+                <tr>
+                    <th>المادة</th>
+                    <th>سعر الكيلو / الوحدة (﷼)</th>
+                    <th>الكمية المستخدمة</th>
+                    <th>التكلفة (﷼)</th>
+                    <th>حذف</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <br>
+        <button class="btn btn-ghost btn-sm" id="addIngredientBtn">+ إضافة مادة خام</button>
+    </section>
+
+    <!-- التشغيل والربح -->
+    <section class="card">
+        <div class="card-title">التشغيل وهامش الربح</div>
+        <div class="card-subtitle">عدّل النسب حسب نوع الطلب.</div>
+
+        <div class="row">
+            <div class="col-4">
+                <label for="overheadPercent">نسبة تكلفة التشغيل %</label>
+                <input id="overheadPercent" type="number" value="30" min="0">
+                <div class="muted">كهرباء، غاز، عمالة، تعبئة...</div>
+            </div>
+            <div class="col-4">
+                <label for="profitPercent">نسبة هامش الربح %</label>
+                <input id="profitPercent" type="number" value="60" min="0">
+                <div class="muted">يفضل أعلى للطلبات الخاصة.</div>
+            </div>
+            <div class="col-4">
+                <label for="rushPercent">زيادة طلب مستعجل %</label>
+                <input id="rushPercent" type="number" value="0" min="0">
+                <div class="muted">مثال: 20–40% لو طلب اليوم لليوم.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- النتائج -->
+    <section class="card">
+        <div class="card-title">النتائج النهائية</div>
+        <button class="btn btn-primary" id="calculateBtn">احسب السعر</button>
+
+        <div id="resultsSection" style="display:none; margin-top:10px;">
+            <div class="results-grid">
+                <div class="result-box">
+                    <div class="result-label">إجمالي تكلفة المواد الخام</div>
+                    <div class="result-value" id="materialsTotal">0 ﷼</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">تكلفة تشغيل</div>
+                    <div class="result-value" id="overheadValue">0 ﷼</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">تكلفة طباعة الصورة</div>
+                    <div class="result-value" id="imagePrintValue">0 ﷼</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">هامش الربح</div>
+                    <div class="result-value" id="profitValue">0 ﷼</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">زيادة مستعجل</div>
+                    <div class="result-value" id="rushValue">0 ﷼</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">السعر قبل الضريبة</div>
+                    <div class="result-value" id="beforeVat">0 ﷼</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">قيمة الضريبة 15%</div>
+                    <div class="result-value" id="vatValue">0 ﷼</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">السعر بعد الضريبة</div>
+                    <div class="result-value" id="afterVat">0 ﷼</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">سعر الحصة الواحدة</div>
+                    <div class="result-value" id="perServing">0 ﷼</div>
+                </div>
+            </div>
+
+            <br>
+
+            <button class="btn btn-success" id="exportExcelBtn">تصدير إلى Excel (CSV)</button>
+            <button class="btn btn-ghost" id="whatsAppBtn">إرسال التفاصيل في واتساب</button>
+            <button class="btn btn-danger" id="resetBtn">تفريغ النموذج</button>
+        </div>
+    </section>
+
+    <!-- الطلبات السابقة -->
+    <section class="card">
+        <div class="card-title">الطلبات السابقة</div>
+        <div class="card-subtitle">يتم حفظ كل عملية تسعير تلقائيًا في هذا الجدول (محليًا في المتصفح).</div>
+
+        <div style="overflow-x:auto;">
+            <table id="ordersTable">
+                <thead>
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>اسم العميل</th>
+                        <th>الهاتف</th>
+                        <th>الطلب</th>
+                        <th>المقاس</th>
+                        <th>السعر بعد الضريبة</th>
+                        <th>عرض في النموذج</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    // =======================
+    // شاشة كلمة المرور
+    // =======================
+    const loginOverlay = document.getElementById("loginOverlay");
+    const passwordInput = document.getElementById("passwordInput");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginError = document.getElementById("loginError");
+    const app = document.getElementById("app");
+
+    const PASSWORD = "0000";
+
+    function handleLogin() {
+        const val = passwordInput.value.trim();
+        if (val === PASSWORD) {
+            loginOverlay.style.display = "none";
+            app.style.display = "block";
+        } else {
+            loginError.textContent = "كلمة المرور غير صحيحة.";
+        }
+    }
+
+    loginBtn.addEventListener("click", handleLogin);
+    passwordInput.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") handleLogin();
+    });
+
+    // =======================
+    // عناصر النموذج
+    // =======================
+    const ingredientsTableBody = document.querySelector("#ingredientsTable tbody");
+    const addIngredientBtn = document.getElementById("addIngredientBtn");
+
+    const clientNameInput = document.getElementById("clientName");
+    const clientPhoneInput = document.getElementById("clientPhone");
+
+    const cakeNameInput = document.getElementById("cakeName");
+    const cakeSizeInput = document.getElementById("cakeSize");
+    const cakeServingsInput = document.getElementById("cakeServings");
+
+    const imagePrintEnabledInput = document.getElementById("imagePrintEnabled");
+    const imagePrintCostInput = document.getElementById("imagePrintCost");
+
+    const overheadPercentInput = document.getElementById("overheadPercent");
+    const profitPercentInput = document.getElementById("profitPercent");
+    const rushPercentInput = document.getElementById("rushPercent");
+
+    const calculateBtn = document.getElementById("calculateBtn");
+    const exportExcelBtn = document.getElementById("exportExcelBtn");
+    const whatsAppBtn = document.getElementById("whatsAppBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    const resultsSection = document.getElementById("resultsSection");
+    const materialsTotalEl = document.getElementById("materialsTotal");
+    const overheadValueEl = document.getElementById("overheadValue");
+    const imagePrintValueEl = document.getElementById("imagePrintValue");
+    const profitValueEl = document.getElementById("profitValue");
+    const rushValueEl = document.getElementById("rushValue");
+    const beforeVatEl = document.getElementById("beforeVat");
+    const vatValueEl = document.getElementById("vatValue");
+    const afterVatEl = document.getElementById("afterVat");
+    const perServingEl = document.getElementById("perServing");
+
+    const ordersTableBody = document.querySelector("#ordersTable tbody");
+
+    let lastCalculation = null;
+
+    // إنشاء صف مادة خام
+    function createIngredientRow(name = "", price = 0, qty = 0) {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td><input type="text" value="${name}"></td>
+            <td><input type="number" value="${price}" step="0.01" min="0"></td>
+            <td><input type="number" value="${qty}" step="0.01" min="0"></td>
+            <td class="total">0 ﷼</td>
+            <td><button type="button" class="btn btn-danger btn-sm deleteBtn">حذف</button></td>
+        `;
+
+        const priceInput = tr.children[1].children[0];
+        const qtyInput = tr.children[2].children[0];
+        const totalCell = tr.querySelector(".total");
+        const deleteBtn = tr.querySelector(".deleteBtn");
+
+        function updateRowTotal() {
+            const p = parseFloat(priceInput.value) || 0;
+            const q = parseFloat(qtyInput.value) || 0;
+            const t = p * q;
+            totalCell.textContent = t.toFixed(2) + " ﷼";
+        }
+
+        priceInput.addEventListener("input", updateRowTotal);
+        qtyInput.addEventListener("input", updateRowTotal);
+        updateRowTotal();
+
+        deleteBtn.addEventListener("click", () => {
+            tr.remove();
+        });
+
+        ingredientsTableBody.appendChild(tr);
+    }
+
+    // مواد افتراضية كبداية
+    createIngredientRow("دقيق", 4, 0.25);
+    createIngredientRow("سكر", 3, 0.2);
+    createIngredientRow("بيض", 0.8, 4);
+
+    addIngredientBtn.addEventListener("click", () => {
+        createIngredientRow();
+    });
+
+    // دالة الحساب الرئيسية
+    calculateBtn.addEventListener("click", () => {
+        const rows = ingredientsTableBody.querySelectorAll("tr");
+        if (rows.length === 0) {
+            alert("أضف مادة خام واحدة على الأقل.");
+            return;
+        }
+
+        let materialsTotal = 0;
+        const ingredientsData = [];
+
+        rows.forEach(row => {
+            const name = row.children[0].children[0].value || "بدون اسم";
+            const price = parseFloat(row.children[1].children[0].value) || 0;
+            const qty = parseFloat(row.children[2].children[0].value) || 0;
+            const total = price * qty;
+            materialsTotal += total;
+            ingredientsData.push({ name, price, qty, total });
+        });
+
+        const overheadPercent = parseFloat(overheadPercentInput.value) || 0;
+        const profitPercent = parseFloat(profitPercentInput.value) || 0;
+        const rushPercent = parseFloat(rushPercentInput.value) || 0;
+
+        const imagePrintEnabled = imagePrintEnabledInput.checked;
+        const imagePrintCost = imagePrintEnabled ? (parseFloat(imagePrintCostInput.value) || 0) : 0;
+
+        const overheadValue = materialsTotal * (overheadPercent / 100);
+        const baseCost = materialsTotal + overheadValue + imagePrintCost;
+        const profitValue = baseCost * (profitPercent / 100);
+        const rushValue = baseCost * (rushPercent / 100);
+
+        const beforeVat = baseCost + profitValue + rushValue;
+        const vatValue = beforeVat * 0.15;
+        const afterVat = beforeVat + vatValue;
+
+        const servings = parseFloat(cakeServingsInput.value) || 1;
+        const perServing = afterVat / servings;
+
+        // عرض النتائج
+        materialsTotalEl.textContent = materialsTotal.toFixed(2) + " ﷼";
+        overheadValueEl.textContent = overheadValue.toFixed(2) + " ﷼";
+        imagePrintValueEl.textContent = imagePrintCost.toFixed(2) + " ﷼";
+        profitValueEl.textContent = profitValue.toFixed(2) + " ﷼";
+        rushValueEl.textContent = rushValue.toFixed(2) + " ﷼";
+        beforeVatEl.textContent = beforeVat.toFixed(2) + " ﷼";
+        vatValueEl.textContent = vatValue.toFixed(2) + " ﷼";
+        afterVatEl.textContent = afterVat.toFixed(2) + " ﷼";
+        perServingEl.textContent = perServing.toFixed(2) + " ﷼";
+
+        resultsSection.style.display = "block";
+
+        lastCalculation = {
+            clientName: clientNameInput.value || "عميل",
+            clientPhone: clientPhoneInput.value || "",
+            cakeName: cakeNameInput.value || "طلب كيك خاص",
+            cakeSize: cakeSizeInput.value,
+            servings,
+            materialsTotal,
+            overheadPercent,
+            overheadValue,
+            imagePrintEnabled,
+            imagePrintCost,
+            profitPercent,
+            profitValue,
+            rushPercent,
+            rushValue,
+            beforeVat,
+            vatValue,
+            afterVat,
+            perServing,
+            ingredientsData
+        };
+
+        // حفظ الطلب في LocalStorage
+        saveOrder({
+            date: new Date().toLocaleString("ar-SA"),
+            ...lastCalculation
+        });
+    });
+
+    // تصدير آخر طلب إلى CSV (Excel)
+    exportExcelBtn.addEventListener("click", () => {
+        if (!lastCalculation) {
+            alert("احسب السعر أولاً قبل التصدير.");
+            return;
+        }
+
+        const lc = lastCalculation;
+        let csv = "";
+
+        csv += "اسم العميل," + lc.clientName + "\n";
+        csv += "الهاتف," + lc.clientPhone + "\n";
+        csv += "وصف الكيك," + lc.cakeName + "\n";
+        csv += "المقاس," + lc.cakeSize + "\n";
+        csv += "عدد الحصص," + lc.servings + "\n\n";
+
+        csv += "المواد الخام\n";
+        csv += "المادة,سعر الكيلو/الوحدة,الكمية,التكلفة (﷼)\n";
+        lc.ingredientsData.forEach(i => {
+            csv += `${i.name},${i.price},${i.qty},${i.total.toFixed(2)}\n`;
+        });
+
+        csv += "\nإجماليات\n";
+        csv += `إجمالي تكلفة المواد,${lc.materialsTotal.toFixed(2)}\n`;
+        csv += `تكلفة التشغيل,${lc.overheadValue.toFixed(2)}\n`;
+        csv += `تكلفة طباعة الصورة,${lc.imagePrintCost.toFixed(2)}\n`;
+        csv += `هامش الربح,${lc.profitValue.toFixed(2)}\n`;
+        csv += `الزيادة للمستعجل,${lc.rushValue.toFixed(2)}\n`;
+        csv += `السعر قبل الضريبة,${lc.beforeVat.toFixed(2)}\n`;
+        csv += `قيمة الضريبة 15%,${lc.vatValue.toFixed(2)}\n`;
+        csv += `السعر بعد الضريبة,${lc.afterVat.toFixed(2)}\n`;
+        csv += `السعر للحصة,${lc.perServing.toFixed(2)}\n`;
+
+        const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "cake_pricing.csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+
+    // إرسال إلى واتساب
+    whatsAppBtn.addEventListener("click", () => {
+        if (!lastCalculation) {
+            alert("احسب السعر أولاً قبل الإرسال.");
+            return;
+        }
+
+        const lc = lastCalculation;
+        let msg = `*تسعير كيك – اليحي*\n`;
+        msg += `\n• العميل: ${lc.clientName}`;
+        if (lc.clientPhone) msg += `\n• الهاتف: ${lc.clientPhone}`;
+        msg += `\n• الطلب: ${lc.cakeName}`;
+        msg += `\n• المقاس: ${lc.cakeSize}`;
+        msg += `\n• عدد الحصص: ${lc.servings}`;
+        if (lc.imagePrintEnabled) {
+            msg += `\n• طباعة صورة: نعم (تكلفة ${lc.imagePrintCost.toFixed(2)} ﷼)`;
+        } else {
+            msg += `\n• طباعة صورة: لا`;
+        }
+        msg += `\n\n*إجماليات:*`;
+        msg += `\nإجمالي المواد: ${lc.materialsTotal.toFixed(2)} ﷼`;
+        msg += `\nتشغيل (${lc.overheadPercent}%): ${lc.overheadValue.toFixed(2)} ﷼`;
+        msg += `\nهامش الربح (${lc.profitPercent}%): ${lc.profitValue.toFixed(2)} ﷼`;
+        if (lc.rushPercent > 0) {
+            msg += `\nزيادة مستعجل (${lc.rushPercent}%): ${lc.rushValue.toFixed(2)} ﷼`;
+        }
+        msg += `\nالسعر قبل الضريبة: ${lc.beforeVat.toFixed(2)} ﷼`;
+        msg += `\nالضريبة (15%): ${lc.vatValue.toFixed(2)} ﷼`;
+        msg += `\n*السعر بعد الضريبة: ${lc.afterVat.toFixed(2)} ﷼*`;
+        msg += `\nسعر الحصة تقريبًا: ${lc.perServing.toFixed(2)} ﷼`;
+
+        const url = "https://wa.me/?text=" + encodeURIComponent(msg);
+        window.open(url, "_blank");
+    });
+
+    // تفريغ النموذج
+    resetBtn.addEventListener("click", () => {
+        location.reload();
+    });
+
+    // ====== نظام حفظ واسترجاع الطلبات السابقة (LocalStorage) ======
+
+    function saveOrder(order) {
+        let orders = JSON.parse(localStorage.getItem("cakeOrders") || "[]");
+        orders.push(order);
+        localStorage.setItem("cakeOrders", JSON.stringify(orders));
+        loadOrders();
+    }
+
+    function loadOrders() {
+        ordersTableBody.innerHTML = "";
+        let orders = JSON.parse(localStorage.getItem("cakeOrders") || "[]");
+
+        orders.forEach((o, index) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${o.date}</td>
+                <td>${o.clientName}</td>
+                <td>${o.clientPhone}</td>
+                <td>${o.cakeName}</td>
+                <td>${o.cakeSize}</td>
+                <td>${o.afterVat.toFixed(2)} ﷼</td>
+                <td><button type="button" class="btn btn-ghost btn-sm" onclick="loadOrder(${index})">عرض</button></td>
+                <td><button type="button" class="btn btn-danger btn-sm" onclick="deleteOrder(${index})">حذف</button></td>
+            `;
+            ordersTableBody.appendChild(tr);
+        });
+    }
+
+    function deleteOrder(index) {
+        let orders = JSON.parse(localStorage.getItem("cakeOrders") || "[]");
+        orders.splice(index, 1);
+        localStorage.setItem("cakeOrders", JSON.stringify(orders));
+        loadOrders();
+    }
+
+    function loadOrder(index) {
+        let orders = JSON.parse(localStorage.getItem("cakeOrders") || "[]");
+        const o = orders[index];
+        if (!o) return;
+
+        clientNameInput.value = o.clientName || "";
+        clientPhoneInput.value = o.clientPhone || "";
+        cakeNameInput.value = o.cakeName || "";
+        cakeSizeInput.value = o.cakeSize;
+        cakeServingsInput.value = o.servings;
+
+        overheadPercentInput.value = o.overheadPercent;
+        profitPercentInput.value = o.profitPercent;
+        rushPercentInput.value = o.rushPercent;
+
+        imagePrintEnabledInput.checked = o.imagePrintEnabled;
+        imagePrintCostInput.value = o.imagePrintCost;
+
+        ingredientsTableBody.innerHTML = "";
+        o.ingredientsData.forEach(i => {
+            createIngredientRow(i.name, i.price, i.qty);
+        });
+
+        alert("تم تحميل الطلب داخل النموذج. يمكنك التعديل أو إعادة الحساب.");
+    }
+
+    // إتاحة الدوال للنقر من HTML
+    window.loadOrder = loadOrder;
+    window.deleteOrder = deleteOrder;
+
+    // تحميل الطلبات عند فتح الصفحة
+    loadOrders();
+</script>
+
+</body>
+</html>
