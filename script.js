@@ -341,6 +341,21 @@ function loadOrder(index) {
 loadOrders();
 
 /* ============================================================
+   دالة فتح واتساب (حل مشكلة الجوال)
+============================================================ */
+
+function openWhatsApp(msg) {
+    const encoded = encodeURIComponent(msg);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        window.location.href = "whatsapp://send?text=" + encoded;
+    } else {
+        window.open("https://wa.me/?text=" + encoded);
+    }
+}
+
+/* ============================================================
    واتساب العميل
 ============================================================ */
 
@@ -348,7 +363,6 @@ whatsAppBtn.addEventListener("click", () => {
     if (!lastCalculation) return alert("احسب السعر أولاً");
 
     const o = lastCalculation;
-
     const pickupTimeFormatted = formatTime12(o.pickupTime);
 
     let msg = `*تفاصيل طلب الكيك – اليحي*\n\n`;
@@ -358,7 +372,7 @@ whatsAppBtn.addEventListener("click", () => {
     msg += `السعر النهائي: ${o.afterVat.toFixed(2)} ﷼\n\n`;
     msg += `شكرًا لاختياركم اليحي 🌟`;
 
-    window.open("https://wa.me/?text=" + encodeURIComponent(msg));
+    openWhatsApp(msg);
 });
 
 /* ============================================================
@@ -388,7 +402,6 @@ whatsAppProductionBtn.addEventListener("click", () => {
     fillingsTableBody.querySelectorAll("tr").forEach(row => {
         const name = row.children[0].children[0].value;
         const qty = row.children[1].children[0].value;
-        const price = row.children[2].children[0].value;
         const total = row.children[3].textContent;
         msg += `- ${name} × ${qty} = ${total} ﷼\n`;
     });
@@ -398,7 +411,6 @@ whatsAppProductionBtn.addEventListener("click", () => {
     addonsTableBody.querySelectorAll("tr").forEach(row => {
         const name = row.children[0].children[0].value;
         const qty = row.children[1].children[0].value;
-        const price = row.children[2].children[0].value;
         const total = row.children[3].textContent;
         msg += `- ${name} × ${qty} = ${total} ﷼\n`;
     });
@@ -416,7 +428,7 @@ whatsAppProductionBtn.addEventListener("click", () => {
 
     msg += `📅 التاريخ: ${o.date}\n`;
 
-    window.open("https://wa.me/?text=" + encodeURIComponent(msg));
+    openWhatsApp(msg);
 });
 
 /* ============================================================
@@ -435,7 +447,7 @@ exportExcelBtn.addEventListener("click", () => {
     csv += `الطلب,${o.cakeName}\n`;
     csv += `السعر بعد الضريبة,${o.afterVat}\n`;
 
-        const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
