@@ -1,0 +1,321 @@
+/* ================================
+   الخط العام
+================================ */
+body {
+    font-family: 'Tajawal', sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+/* ================================
+   عناصر عامة
+================================ */
+.page {
+    padding: 20px;
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #b88a44;
+}
+
+/* ================================
+   شبكة الأعمدة
+================================ */
+.row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.col-3 { width: 25%; }
+.col-4 { width: 33.33%; }
+.col-6 { width: 50%; }
+.col-12 { width: 100%; }
+
+@media (max-width: 768px) {
+    .col-3, .col-4, .col-6 {
+        width: 100%;
+    }
+}
+
+/* ================================
+   الحقول
+================================ */
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus {
+    border-color: #b88a44;
+    outline: none;
+}
+
+/* ================================
+   الأزرار
+================================ */
+.btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background: #b88a44;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #a0783c;
+}
+
+.btn-success {
+    background: #4caf50;
+    color: #fff;
+}
+
+.btn-ghost {
+    background: #eee;
+    color: #333;
+}
+
+.btn-danger {
+    background: #d9534f;
+    color: #fff;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+/* ================================
+   الهيدر
+================================ */
+header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.brand {
+    font-size: 26px;
+    font-weight: 700;
+    color: #b88a44;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #777;
+}
+/* ================================
+   الجداول
+================================ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table thead {
+    background: #b88a44;
+    color: #fff;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+table tbody tr:hover {
+    background: #f1e7d8;
+}
+
+/* ================================
+   نتائج الحساب
+================================ */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.result-box {
+    background: #fff7e6;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e6d3b3;
+    text-align: center;
+}
+
+.result-label {
+    font-weight: 600;
+    color: #b88a44;
+    margin-bottom: 5px;
+}
+
+/* ================================
+   شاشة تسجيل الدخول
+================================ */
+.login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.login-card {
+    background: #fff;
+    padding: 30px;
+    width: 320px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.login-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #b88a44;
+    margin-bottom: 10px;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.login-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: 4px;
+}
+
+.login-error {
+    color: red;
+    margin-top: 8px;
+    height: 18px;
+}
+
+.login-btn {
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* ================================
+   معاينة الصورة
+================================ */
+#previewImage {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
+/* ================================
+   صفحة الطباعة
+================================ */
+@media print {
+
+    body {
+        background: #fff;
+        padding: 0;
+        margin: 0;
+    }
+
+    .print-container {
+        padding: 25px;
+        font-family: 'Tajawal', sans-serif;
+        direction: rtl;
+    }
+
+    .print-title {
+        font-size: 26px;
+        font-weight: 700;
+        color: #b88a44;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .print-section {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .print-label {
+        font-weight: 700;
+        color: #9a7032;
+        display: inline-block;
+        width: 140px;
+    }
+
+    img.print-image {
+        max-width: 250px;
+        margin-top: 10px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+
+    /* إخفاء كل شيء خارج صفحة الطباعة */
+    #app, #loginOverlay {
+        display: none !important;
+    }
+}
+
+/* ================================
+   تحسينات عامة
+================================ */
+#ordersTable td button {
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+#resultsSection button {
+    margin-left: 5px;
+}
+
+#previewImageBox img {
+    max-height: 180px;
+    object-fit: contain;
+}
