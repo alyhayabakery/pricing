@@ -2,359 +2,125 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام تسعير الكيك - اليحي</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام طلبات الكيك - اليحي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- خط تاجوال -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <!-- ملف التنسيق -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- خط Tajawal -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script>
+        emailjs.init("1wFX-anJHxr-LM6Bh");
+    </script>
+
+    <!-- jsPDF لتحويل الصورة إلى PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
-<style>
-    /* ===========================
-   الأساسيات
-=========================== */
 
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: "Tajawal", sans-serif;
-    background: #f7f3ec;
-    color: #222;
-}
-
-.page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px 15px 40px;
-}
-
-/* ===========================
-   الهيدر
-=========================== */
-
-header {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-    gap: 10px;
-}
-
-.brand {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #9a7032;
-}
-
-.subtitle {
-    font-size: 0.9rem;
-    color: #777;
-}
-
-/* ===========================
-   الكروت
-=========================== */
-
-.card {
-    background: #ffffff;
-    border-radius: 12px;
-    border: 1px solid #e0d6c7;
-    padding: 16px 14px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-}
-
-.card-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #9a7032;
-    margin-bottom: 6px;
-}
-
-/* ===========================
-   الشبكة
-=========================== */
-
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.col-3 { flex: 0 0 calc(25% - 8px); }
-.col-4 { flex: 0 0 calc(33.333% - 7px); }
-.col-6 { flex: 0 0 calc(50% - 5px); }
-.col-12 { flex: 0 0 100%; }
-
-@media (max-width: 768px) {
-    .col-3, .col-4, .col-6 {
-        flex: 0 0 100%;
-    }
-}
-
-/* ===========================
-   الحقول
-=========================== */
-
-label {
-    font-size: 0.85rem;
-    display: block;
-    margin-bottom: 4px;
-}
-
-input, select {
-    width: 100%;
-    padding: 7px 8px;
-    border-radius: 8px;
-    border: 1px solid #e0d6c7;
-    font-family: inherit;
-    font-size: 0.9rem;
-    background: #fff;
-}
-
-input:focus, select:focus {
-    border-color: #b88a44;
-    box-shadow: 0 0 0 2px rgba(184,138,68,0.15);
-}
-
-/* ===========================
-   الجداول
-=========================== */
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-}
-
-th, td {
-    border: 1px solid #eee1cd;
-    padding: 6px 4px;
-    text-align: center;
-}
-
-th {
-    background: #f3e7d3;
-    font-weight: 600;
-}
-
-tbody tr:nth-child(even) {
-    background: #fffaf3;
-}
-
-/* ===========================
-   الأزرار
-=========================== */
-
-.btn {
-    padding: 7px 14px;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.85rem;
-}
-
-.btn-primary {
-    background: #b88a44;
-    color: #fff;
-}
-
-.btn-primary:hover {
-    background: #9a7032;
-}
-
-.btn-success {
-    background: #e6f7ec;
-    color: #27ae60;
-}
-
-.btn-danger {
-    background: #fbe9e7;
-    color: #c0392b;
-}
-
-.btn-ghost {
-    background: #f7f0e6;
-    color: #9a7032;
-}
-
-.btn-sm {
-    padding: 3px 8px;
-    font-size: 0.75rem;
-}
-
-/* ===========================
-   النتائج
-=========================== */
-
-.results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 8px;
-}
-
-.result-box {
-    background: #f9f4ea;
-    padding: 8px;
-    border-radius: 10px;
-    border: 1px solid #eadbc2;
-}
-
-.result-label {
-    font-size: 0.8rem;
-    color: #777;
-}
-
-.result-value {
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-/* ===========================
-   شاشة كلمة المرور
-=========================== */
-
-.login-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.login-card {
-    background: #ffffff;
-    border-radius: 14px;
-    border: 1px solid #e0d6c7;
-    padding: 20px 18px;
-    max-width: 320px;
-    width: 100%;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-    text-align: center;
-}
-
-.login-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #9a7032;
-    margin-bottom: 8px;
-}
-
-.login-subtitle {
-    font-size: 0.85rem;
-    color: #777;
-    margin-bottom: 12px;
-}
-
-.login-input {
-    width: 100%;
-    padding: 8px 10px;
-    border-radius: 10px;
-    border: 1px solid #e0d6c7;
-    font-family: inherit;
-    font-size: 0.95rem;
-    letter-spacing: 0.3em;
-    text-align: center;
-}
-
-.login-error {
-    font-size: 0.8rem;
-    color: #c0392b;
-    margin-top: 6px;
-    min-height: 16px;
-}
-
-.login-btn {
-    margin-top: 12px;
-    width: 100%;
-}
-</style>
 <body>
 
-<!-- شاشة كلمة المرور -->
-<div class="login-overlay" id="loginOverlay">
+<!-- شاشة تسجيل الدخول -->
+<div id="loginOverlay" class="login-overlay">
     <div class="login-card">
-        <div class="login-title">دخول نظام تسعير الكيك</div>
-        <div class="login-subtitle">أدخل كلمة المرور للمتابعة</div>
-        <input id="passwordInput" type="password" maxlength="4" class="login-input" placeholder="••••">
+        <div class="login-title">تسجيل الدخول</div>
+        <div class="login-subtitle">أدخل كلمة المرور لتحديد الفرع</div>
+
+        <input id="passwordInput" class="login-input" type="password" maxlength="4">
         <div id="loginError" class="login-error"></div>
+
         <button id="loginBtn" class="btn btn-primary login-btn">دخول</button>
     </div>
 </div>
 
-<div class="page" id="app" style="display:none;">
+<!-- التطبيق -->
+<div id="app" class="page" style="display:none;">
 
     <header>
-        <div>
-            <div class="brand">نظام تسعير الكيك - اليحي</div>
-            <div class="subtitle">تسعير الكيك + الحشوات + الإضافات + التشغيل + الربح + الضريبة</div>
-        </div>
+        <div class="brand">نظام طلبات الكيك - اليحي</div>
+        <div class="subtitle">إدارة الطلبات - الفروع</div>
     </header>
 
     <!-- بيانات العميل -->
     <section class="card">
         <div class="card-title">بيانات العميل</div>
+
         <div class="row">
-            <div class="col-4">
+            <div class="col-6">
                 <label>اسم العميل</label>
-                <input id="clientName" type="text" placeholder="مثال: أحمد خالد">
+                <input id="clientName" type="text">
             </div>
-            <div class="col-4">
-                <label>رقم الهاتف</label>
-                <input id="clientPhone" type="text" placeholder="05xxxxxxxx">
+
+            <div class="col-6">
+                <label>رقم الجوال</label>
+                <input id="clientPhone" type="text">
             </div>
         </div>
     </section>
 
-    <!-- بيانات الطلب -->
+    <!-- تفاصيل الطلب -->
     <section class="card">
-        <div class="card-title">بيانات الطلب</div>
+        <div class="card-title">تفاصيل الطلب</div>
+
         <div class="row">
             <div class="col-6">
-                <label>اسم/وصف الكيك</label>
-                <input id="cakeName" type="text" placeholder="مثال: كيكة شوكولاتة بطبقة لوتس">
+                <label>اسم الكيك</label>
+                <input id="cakeName" type="text">
             </div>
-            <div class="col-3">
+
+            <div class="col-6">
+                <label>عدد الحصص</label>
+                <input id="cakeServings" type="number" min="1">
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+            <div class="col-6">
                 <label>شكل الكيك</label>
                 <select id="cakeShape">
                     <option value="round">دائري</option>
                     <option value="rect">مستطيل</option>
                 </select>
             </div>
-            <div class="col-3">
-                <label>عدد الحصص</label>
-                <input id="cakeServings" type="number" value="10" min="1">
-            </div>
         </div>
-
-        <!-- موعد الاستلام -->
+                <!-- موعد الاستلام -->
         <div class="row" style="margin-top:10px;">
             <div class="col-3">
                 <label>تاريخ الاستلام</label>
                 <input id="pickupDate" type="date">
             </div>
+
             <div class="col-3">
                 <label>وقت الاستلام</label>
                 <input id="pickupTime" type="time">
             </div>
         </div>
 
+        <!-- رفع صورة للطباعة -->
+        <div class="row" style="margin-top:15px;">
+            <div class="col-6">
+                <label>صورة للطباعة (اختياري)</label>
+                <input id="printImage" type="file" accept="image/*">
+            </div>
+        </div>
+
+        <div id="previewImageBox" style="margin-top:10px; display:none;">
+            <label>معاينة الصورة:</label>
+            <img id="previewImage" src="" style="max-width:200px; border-radius:8px; border:1px solid #ddd;">
+        </div>
+
         <!-- المقاسات الدائرية -->
-        <div id="roundSizes" style="margin-top:10px;">
+        <div id="roundSizes" style="margin-top:15px;">
             <label>اختر المقاس (دائري)</label>
             <select id="cakeSize">
                 <option value="15">15 سم — 60 ﷼</option>
                 <option value="20">20 سم — 80 ﷼</option>
                 <option value="25">25 سم — 110 ﷼</option>
-                <option value="custom">مخصص (5–7 ﷼ لكل سم)</option>
+                <option value="custom">مخصص (6 ﷼ لكل سم)</option>
             </select>
 
             <div id="customHeightBox" style="display:none; margin-top:10px;">
@@ -364,7 +130,7 @@ tbody tr:nth-child(even) {
         </div>
 
         <!-- المقاسات المستطيلة -->
-        <div id="rectSizes" style="display:none; margin-top:10px;">
+        <div id="rectSizes" style="display:none; margin-top:15px;">
             <label>اختر المقاس (مستطيل)</label>
             <select id="rectSize">
                 <option value="30x40">30 × 40 — 230 ﷼</option>
@@ -412,19 +178,21 @@ tbody tr:nth-child(even) {
 
         <button class="btn btn-ghost btn-sm" id="addAddonBtn">+ إضافة صنف</button>
     </section>
-
-    <!-- التشغيل والربح -->
+        <!-- التشغيل والربح -->
     <section class="card">
         <div class="card-title">التشغيل والربح</div>
+
         <div class="row">
             <div class="col-4">
                 <label>نسبة التشغيل %</label>
                 <input id="overheadPercent" type="number" value="30">
             </div>
+
             <div class="col-4">
                 <label>نسبة الربح %</label>
                 <input id="profitPercent" type="number" value="60">
             </div>
+
             <div class="col-4">
                 <label>زيادة مستعجل %</label>
                 <input id="rushPercent" type="number" value="0">
@@ -436,7 +204,7 @@ tbody tr:nth-child(even) {
     <section class="card">
         <button class="btn btn-primary" id="calculateBtn">احسب السعر</button>
 
-        <div id="resultsSection" style="display:none; margin-top:10px;">
+        <div id="resultsSection" style="display:none; margin-top:15px;">
             <div class="results-grid">
                 <div class="result-box"><div class="result-label">الحشوات</div><div id="fillingsTotal"></div></div>
                 <div class="result-box"><div class="result-label">الإضافات</div><div id="addonsTotal"></div></div>
@@ -451,6 +219,8 @@ tbody tr:nth-child(even) {
             <button class="btn btn-success" id="exportExcelBtn">تصدير Excel</button>
             <button class="btn btn-ghost" id="whatsAppBtn">واتساب العميل</button>
             <button class="btn btn-primary" id="whatsAppProductionBtn">واتساب الإنتاج</button>
+            <button class="btn btn-primary" id="sendEmailBtn">إرسال عبر الإيميل</button>
+            <button class="btn btn-ghost" id="printInvoiceBtn">طباعة الطلب</button>
         </div>
     </section>
 
@@ -462,6 +232,8 @@ tbody tr:nth-child(even) {
             <thead>
                 <tr>
                     <th>التاريخ</th>
+                    <th>رقم الطلب</th>
+                    <th>باتش الطلب</th>
                     <th>العميل</th>
                     <th>الهاتف</th>
                     <th>الطلب</th>
@@ -473,8 +245,7 @@ tbody tr:nth-child(even) {
             <tbody></tbody>
         </table>
     </section>
-
-</div>
+    </div> <!-- نهاية صفحة التطبيق -->
 
 <!-- ملف السكربت -->
 <script src="script.js"></script>
